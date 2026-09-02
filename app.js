@@ -6,7 +6,7 @@
  * [실습용 OpenRouter API Key 설정]
  * 아래 DEFAULT_OPENROUTER_KEY 변수에 오픈라우터 API 키를 입력해 두시면 자동 로드됩니다.
  */
-const DEFAULT_OPENROUTER_KEY = ''; // 예: 'sk-or-v1-xxxxxxxxxxxxxxxx'
+const DEFAULT_OPENROUTER_KEY = '78666347696b616f38395043566a6f';
 
 // ==========================================================================
 // 서울시 교육 공공서비스예약 데이터셋 (OA-2268 연동 데이터)
@@ -427,7 +427,7 @@ const elements = {
   systemPromptInput: document.getElementById('systemPromptInput'),
   statusDot: document.getElementById('statusDot'),
   statusText: document.getElementById('statusText'),
-  
+
   totalCourseCount: document.getElementById('totalCourseCount'),
   activeCourseCount: document.getElementById('activeCourseCount'),
 
@@ -452,7 +452,7 @@ function setupMarkdownRenderer() {
     const renderer = new marked.Renderer();
 
     // Render clickable links with blank target & custom button class if reservation link
-    renderer.link = function(href, title, text) {
+    renderer.link = function (href, title, text) {
       const isRsvUrl = href.includes('yeyak.seoul.go.kr');
       if (isRsvUrl) {
         return `<a href="${href}" target="_blank" rel="noopener noreferrer" class="rsv-link-btn"><i class="fa-solid fa-arrow-up-right-from-square"></i> ${text || '공공서비스 예약 바로가기'}</a>`;
@@ -460,7 +460,7 @@ function setupMarkdownRenderer() {
       return `<a href="${href}" target="_blank" rel="noopener noreferrer">${text}</a>`;
     };
 
-    renderer.code = function(code, lang) {
+    renderer.code = function (code, lang) {
       const language = lang && hljs.getLanguage(lang) ? lang : 'text';
       let highlightedCode = code;
       if (typeof hljs !== 'undefined') {
@@ -503,7 +503,7 @@ function escapeHtml(text) {
     .replace(/'/g, "&#039;");
 }
 
-window.copyToClipboard = function(button) {
+window.copyToClipboard = function (button) {
   const codeBlock = button.closest('.code-block-wrapper').querySelector('code');
   const textToCopy = codeBlock.innerText;
 
@@ -652,14 +652,14 @@ function stopGeneration() {
 // RAG: Query Matcher for Seoul Education Reservation Dataset
 function searchRelevantCourses(userQuery) {
   const query = userQuery.toLowerCase();
-  
+
   // Scoring each course based on match
   const scored = seoulEduData.map(course => {
     let score = 0;
-    
+
     // District match (종로구, 송파구, 마포구, 강서구, 강동구, 광진구 등)
     if (query.includes(course.district.toLowerCase())) score += 5;
-    
+
     // Place match (한성백제박물관, 서울역사박물관, 강서습지, 월드컵공원, 길동생태공원 등)
     if (query.includes(course.place.toLowerCase()) || course.place.toLowerCase().split('>').some(p => query.includes(p))) score += 5;
 
@@ -695,7 +695,7 @@ function searchRelevantCourses(userQuery) {
   if (topMatches.length > 0) {
     return topMatches.slice(0, 7);
   }
-  
+
   // Default fallback: return current active courses & popular museum courses
   return seoulEduData.slice(0, 7);
 }
@@ -747,7 +747,7 @@ async function handleFormSubmit(e) {
 
   // Retrieve relevant Seoul Public Service Education Courses
   const matchedCourses = searchRelevantCourses(userText);
-  
+
   // Format Context Data for LLM System Prompt
   const contextDataText = matchedCourses.map((item, idx) => `
 [강좌 ${idx + 1}]
