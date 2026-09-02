@@ -705,14 +705,22 @@ async function handleFormSubmit(e) {
   e.preventDefault();
 
   const userText = elements.userInput.value.trim();
-  const apiKey = elements.apiKeyInput.value.trim();
-
   if (!userText) return;
 
-  if (!apiKey) {
-    alert('OpenRouter API Key를 입력하거나 app.js 파일 상단 변수에 키를 입력해주세요!');
+  let apiKey = elements.apiKeyInput.value.trim();
+  if (!apiKey && typeof DEFAULT_OPENROUTER_KEY !== 'undefined' && DEFAULT_OPENROUTER_KEY.trim() !== '') {
+    apiKey = DEFAULT_OPENROUTER_KEY.trim();
+    elements.apiKeyInput.value = apiKey;
+  }
+
+  if (!apiKey || apiKey.length < 10) {
+    elements.sidebar.classList.add('active');
+    elements.apiKeyInput.style.borderColor = 'var(--error-color)';
     elements.apiKeyInput.focus();
+    alert('⚠️ OpenRouter API Key가 입력되지 않았습니다!\n\n왼쪽 사이드바의 [API Key] 입력란에 발급받으신 OpenRouter 키(sk-or-v1-...)를 입력하거나, app.js 파일 10번째 줄에 키를 넣어주세요.');
     return;
+  } else {
+    elements.apiKeyInput.style.borderColor = '';
   }
 
   if (!elements.welcomeScreen.classList.contains('hidden')) {
