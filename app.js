@@ -886,7 +886,11 @@ ${userSystemPrompt ? "\n[추가 유저 지침]\n" + userSystemPrompt : ""}
       }
     } else {
       console.error('OpenRouter API Error:', error);
-      contentElement.innerHTML = `<div style="color: var(--error-color);"><i class="fa-solid fa-triangle-exclamation"></i> <strong>오류 발생:</strong> ${escapeHtml(error.message)}</div>`;
+      let userFriendlyMsg = error.message;
+      if (error.message.includes('User not found') || error.message.includes('401')) {
+        userFriendlyMsg = `API Key가 유효하지 않거나 만료되었습니다. (User not found)<br><br>💡 <a href="https://openrouter.ai/keys" target="_blank">https://openrouter.ai/keys</a> 에서 새로운 API Key를 발급받아 왼쪽 사이드바 [API Key] 란 또는 app.js 파일 9번째 줄에 입력해 주세요.`;
+      }
+      contentElement.innerHTML = `<div style="color: var(--error-color);"><i class="fa-solid fa-triangle-exclamation"></i> <strong>오류 발생:</strong> ${userFriendlyMsg}</div>`;
     }
   } finally {
     contentElement.classList.remove('streaming-cursor');
