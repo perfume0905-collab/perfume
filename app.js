@@ -536,11 +536,20 @@ function initDatasetStats() {
 }
 
 function initKeyAndSettings() {
+  const savedKey = localStorage.getItem('omni_openrouter_key');
+  let keyToUse = '';
+  
   if (DEFAULT_OPENROUTER_KEY && DEFAULT_OPENROUTER_KEY.trim() !== '') {
-    elements.apiKeyInput.value = DEFAULT_OPENROUTER_KEY.trim();
-  } else {
-    const savedKey = localStorage.getItem('omni_openrouter_key');
-    if (savedKey) elements.apiKeyInput.value = savedKey;
+    keyToUse = DEFAULT_OPENROUTER_KEY.trim();
+  } else if (savedKey && savedKey.trim() !== '') {
+    keyToUse = savedKey.trim();
+  }
+
+  if (keyToUse) {
+    if (!keyToUse.startsWith('sk-or-v1-')) {
+      keyToUse = 'sk-or-v1-' + keyToUse;
+    }
+    elements.apiKeyInput.value = keyToUse;
   }
   updateModelDisplay();
 }
@@ -708,16 +717,23 @@ async function handleFormSubmit(e) {
   if (!userText) return;
 
   let apiKey = elements.apiKeyInput.value.trim();
-  if (!apiKey && typeof DEFAULT_OPENROUTER_KEY !== 'undefined' && DEFAULT_OPENROUTER_KEY.trim() !== '') {
+  if ((!apiKey || apiKey === 'sk-or-v1-') && typeof DEFAULT_OPENROUTER_KEY !== 'undefined' && DEFAULT_OPENROUTER_KEY.trim() !== '') {
     apiKey = DEFAULT_OPENROUTER_KEY.trim();
+  }
+
+  if (apiKey && !apiKey.startsWith('sk-or-v1-')) {
+    apiKey = 'sk-or-v1-' + apiKey;
+  }
+
+  if (apiKey) {
     elements.apiKeyInput.value = apiKey;
   }
 
-  if (!apiKey || apiKey.length < 10) {
+  if (!apiKey || apiKey.length < 15) {
     elements.sidebar.classList.add('active');
     elements.apiKeyInput.style.borderColor = 'var(--error-color)';
     elements.apiKeyInput.focus();
-    alert('⚠️ OpenRouter API Key가 입력되지 않았습니다!\n\n왼쪽 사이드바의 [API Key] 입력란에 발급받으신 OpenRouter 키(sk-or-v1-...)를 입력하거나, app.js 파일 10번째 줄에 키를 넣어주세요.');
+    alert('⚠️ OpenRouter API Key가 올바르지 않습니다!\n\n오픈라우터 키는 sk-or-v1-로 시작해야 합니다. 사이드바의 API Key 입력란을 확인해 주세요.');
     return;
   } else {
     elements.apiKeyInput.style.borderColor = '';
