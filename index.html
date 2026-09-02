@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>서울시 교육 공공서비스예약 AI 가이드 - OmniAI</title>
-  <meta name="description" content="서울시 공공서비스예약 교육·강좌 데이터를 기반으로 원하는 예약을 맞춤 안내하는 AI 챗봇">
+  <title>서울시 교육 공공서비스예약 AI 가이드 & 지도 - OmniAI</title>
+  <meta name="description" content="서울시 공공서비스예약 교육·강좌 데이터 및 대화형 지도를 기반으로 맞춤 안내하는 AI 챗봇">
   
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -14,6 +14,9 @@
   <!-- FontAwesome Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   
+  <!-- Leaflet.js CSS for Interactive Map -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+
   <!-- Highlight.js CSS for Code Highlighting -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/tokyo-night-dark.min.css">
   
@@ -35,7 +38,7 @@
           </div>
           <div class="brand-text">
             <span class="brand-title">서울시 교육예약 AI</span>
-            <span class="badge">공공데이터</span>
+            <span class="badge">공공데이터+지도</span>
           </div>
         </div>
         <button class="btn-icon mobile-only" id="closeSidebarBtn" title="사이드바 닫기">
@@ -132,16 +135,33 @@
             <i class="fa-solid fa-bars"></i>
           </button>
           <div class="current-model-info">
-            <span class="model-label">공공데이터 챗봇 가이드</span>
+            <span class="model-label">공공데이터 + 위치 지도 챗봇</span>
             <h2 id="currentModelDisplay" class="model-name">서울시 교육 공공서비스예약 AI</h2>
           </div>
         </div>
         <div class="header-right">
+          <button class="btn btn-secondary btn-sm" id="toggleMapBtn" title="지도 펼치기/접기">
+            <i class="fa-solid fa-map-location-dot"></i> <span id="mapToggleText">교육 지도 보기</span>
+          </button>
           <button class="btn btn-secondary btn-sm" id="clearHistoryBtn" title="대화 내역 비우기">
             <i class="fa-solid fa-trash-can"></i> 대화 비우기
           </button>
         </div>
       </header>
+
+      <!-- Map View Panel Container (Collapsible) -->
+      <div class="map-view-panel hidden" id="mapViewPanel">
+        <div class="map-header">
+          <div class="map-title"><i class="fa-solid fa-map-pin"></i> 서울시 교육 서비스 위치 지도</div>
+          <div class="map-controls">
+            <span class="map-hint">마커를 클릭하면 상세 정보와 예약 바로가기 링크를 확인할 수 있습니다.</span>
+            <button class="btn-icon" id="closeMapBtn" title="지도 접기">
+              <i class="fa-solid fa-xmark"></i>
+            </button>
+          </div>
+        </div>
+        <div id="seoulEduMap" class="edu-map"></div>
+      </div>
 
       <!-- Messages Viewport -->
       <div class="messages-container" id="messagesContainer">
@@ -151,7 +171,7 @@
             <i class="fa-solid fa-landmark"></i>
           </div>
           <h1>서울시 교육 공공서비스예약 AI 가이드</h1>
-          <p>박물관 탐험, 생태 체험, 인턴제, 야간 탐방 등 서울시의 다양한 공공 교육 정보를 질문해 보세요!</p>
+          <p>박물관 탐험, 생태 체험, 인턴제, 야간 탐방 등 서울시의 다양한 공공 교육 정보를 질문하거나 상단 지도에서 위치를 직접 확인해 보세요!</p>
 
           <!-- Quick Suggestion Chips -->
           <div class="suggestion-chips">
@@ -199,11 +219,14 @@
           </div>
         </form>
         <div class="input-footer-note">
-          <i class="fa-solid fa-shield-halved"></i> 서울특별시 공공서비스예약 데이터(https://yeyak.seoul.go.kr)에 기반하여 맞춤 검색 및 안내를 제공합니다.
+          <i class="fa-solid fa-shield-halved"></i> 서울특별시 공공서비스예약 데이터(https://yeyak.seoul.go.kr)에 기반하여 맞춤 검색 및 위치 지도를 제공합니다.
         </div>
       </div>
     </main>
   </div>
+
+  <!-- Leaflet.js Map Library -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
   <!-- External Libraries: Marked (Markdown) & Highlight.js (Code highlighting) -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/12.0.1/marked.min.js"></script>

@@ -1,13 +1,13 @@
 /**
  * ==========================================================================
- * OmniAI - 서울시 교육 공공서비스예약 AI 가이드 JavaScript
+ * OmniAI - 서울시 교육 공공서비스예약 AI 가이드 & 지도 JavaScript
  * ==========================================================================
- * 
-/**
- * 1. OpenRouter AI 챗봇 호출 키 (sk-or-v1-로 시작하는 키)
- *    https://openrouter.ai/keys 에서 발급받아 입력하세요.
  */
-const DEFAULT_OPENROUTER_KEY = ''; // 예: 'sk-or-v1-xxxxxxxxxxxxxxxx'
+
+/**
+ * 1. OpenRouter AI 챗봇 호출 키
+ */
+const DEFAULT_OPENROUTER_KEY = ''; // OpenRouter API Key (sk-or-v1-...)
 
 /**
  * 2. 서울시 열린데이터광장 공공데이터 인증키 (OA-2268 연동용)
@@ -15,7 +15,7 @@ const DEFAULT_OPENROUTER_KEY = ''; // 예: 'sk-or-v1-xxxxxxxxxxxxxxxx'
 const SEOUL_OPEN_API_KEY = '78666347696b616f38395043566a6f';
 
 // ==========================================================================
-// 서울시 교육 공공서비스예약 데이터셋 (OA-2268 연동 데이터)
+// 서울시 교육 공공서비스예약 데이터셋 (위도/경도 좌표 포함)
 // ==========================================================================
 const seoulEduData = [
   {
@@ -29,6 +29,8 @@ const seoulEduData = [
     url: "https://yeyak.seoul.go.kr/web/reservation/selectReservView.do?rsv_svc_id=S260210133959300415",
     district: "종로구",
     tel: "02-724-0236,191",
+    lat: 37.570500,
+    lng: 126.970374,
     details: "초등학생 대상 시청각 및 보드게임 학습 역사 교육"
   },
   {
@@ -42,6 +44,8 @@ const seoulEduData = [
     url: "https://yeyak.seoul.go.kr/web/reservation/selectReservView.do?rsv_svc_id=S260519103905622756",
     district: "종로구",
     tel: "02-724-0199 / 0196",
+    lat: 37.570500,
+    lng: 126.970374,
     details: "시니어 대상 시대의 명곡 역사 문화 강좌"
   },
   {
@@ -55,6 +59,8 @@ const seoulEduData = [
     url: "https://yeyak.seoul.go.kr/web/reservation/selectReservView.do?rsv_svc_id=S260622155501556026",
     district: "종로구",
     tel: "02-724-0236, 0193",
+    lat: 37.570500,
+    lng: 126.970374,
     details: "중학생 대상 박물관 진로 직업 인턴 체험 프로그램"
   },
   {
@@ -68,6 +74,8 @@ const seoulEduData = [
     url: "https://yeyak.seoul.go.kr/web/reservation/selectReservView.do?rsv_svc_id=S260804164236879206",
     district: "종로구",
     tel: "02-724-0199, 0280",
+    lat: 37.570500,
+    lng: 126.970374,
     details: "성인 대상 역사 강연 인문학 심화 과정"
   },
   {
@@ -81,6 +89,8 @@ const seoulEduData = [
     url: "https://yeyak.seoul.go.kr/web/reservation/selectReservView.do?rsv_svc_id=S260806090535821750",
     district: "종로구",
     tel: "02-724-9750, 0196",
+    lat: 37.570500,
+    lng: 126.970374,
     details: "초등 자녀 동반 가족 궁궐 경희궁 탐험 생태 역사 체험"
   },
   {
@@ -94,6 +104,8 @@ const seoulEduData = [
     url: "https://yeyak.seoul.go.kr/web/reservation/selectReservView.do?rsv_svc_id=S260821162002108928",
     district: "마포구",
     tel: "02-302-6687",
+    lat: 37.570060,
+    lng: 126.879480,
     details: "환경지표곤충 반딧불이 생태 해설 프로그램 (화요일 운영)"
   },
   {
@@ -107,6 +119,8 @@ const seoulEduData = [
     url: "https://yeyak.seoul.go.kr/web/reservation/selectReservView.do?rsv_svc_id=S260820162219957629",
     district: "마포구",
     tel: "02-300-5574, 02-302-7363",
+    lat: 37.569686,
+    lng: 126.880072,
     details: "누에 알, 애벌레, 누에고치 명주실 뽑기 생태 해설"
   },
   {
@@ -120,6 +134,8 @@ const seoulEduData = [
     url: "https://yeyak.seoul.go.kr/web/reservation/selectReservView.do?rsv_svc_id=S241020135353369824",
     district: "강서구",
     tel: "02-3661-7133",
+    lat: 37.586039,
+    lng: 126.817145,
     details: "성인 대상 실내 무료 수공예 공방 체험"
   },
   {
@@ -133,6 +149,8 @@ const seoulEduData = [
     url: "https://yeyak.seoul.go.kr/web/reservation/selectReservView.do?rsv_svc_id=S260221153407453243",
     district: "강서구",
     tel: "02-3661-7133",
+    lat: 37.586039,
+    lng: 126.817145,
     details: "가족 대상 강서습지 조류 탐조 야외 생태 교육"
   },
   {
@@ -146,6 +164,8 @@ const seoulEduData = [
     url: "https://yeyak.seoul.go.kr/web/reservation/selectReservView.do?rsv_svc_id=S260224162339790929",
     district: "강서구",
     tel: "02-3661-7133",
+    lat: 37.586039,
+    lng: 126.817145,
     details: "초등 아동 동반 가족 밧줄 야외 생태 놀이 체험"
   },
   {
@@ -159,6 +179,8 @@ const seoulEduData = [
     url: "https://yeyak.seoul.go.kr/web/reservation/selectReservView.do?rsv_svc_id=S260823161642403048",
     district: "강서구",
     tel: "02-3661-7133",
+    lat: 37.586039,
+    lng: 126.817145,
     details: "강서습지 야외 철새 흔적 탐구 가족 생태 탐방"
   },
   {
@@ -172,6 +194,8 @@ const seoulEduData = [
     url: "https://yeyak.seoul.go.kr/web/reservation/selectReservView.do?rsv_svc_id=S260823162102711417",
     district: "강서구",
     tel: "02-3661-7133",
+    lat: 37.586039,
+    lng: 126.817145,
     details: "성인 대상 나뭇잎 활용 액세서리 키링 만들기"
   },
   {
@@ -185,6 +209,8 @@ const seoulEduData = [
     url: "https://yeyak.seoul.go.kr/web/reservation/selectReservView.do?rsv_svc_id=S260823162429077645",
     district: "강서구",
     tel: "02-3661-7133",
+    lat: 37.586039,
+    lng: 126.817145,
     details: "메뚜기 관찰 및 밧줄 놀이 가족 생태 프로그램"
   },
   {
@@ -198,6 +224,8 @@ const seoulEduData = [
     url: "https://yeyak.seoul.go.kr/web/reservation/selectReservView.do?rsv_svc_id=S260826103733650639",
     district: "광진구",
     tel: "02-450-9338",
+    lat: 37.551307,
+    lng: 127.085052,
     details: "어린이 텃밭 에코프린트 손수건 농사 생태 체험"
   },
   {
@@ -211,6 +239,8 @@ const seoulEduData = [
     url: "https://yeyak.seoul.go.kr/web/reservation/selectReservView.do?rsv_svc_id=S260821132811073194",
     district: "강동구",
     tel: "02-460-2909",
+    lat: 37.539070,
+    lng: 127.153330,
     details: "유아 및 어린이집 대상 가을 곤충 생태 학교"
   },
   {
@@ -224,6 +254,8 @@ const seoulEduData = [
     url: "https://yeyak.seoul.go.kr/web/reservation/selectReservView.do?rsv_svc_id=S260821140019406777",
     district: "강동구",
     tel: "02-460-2909",
+    lat: 37.539070,
+    lng: 127.153330,
     details: "포도껍질 활용 천연 염색 공작 체험"
   },
   {
@@ -237,6 +269,8 @@ const seoulEduData = [
     url: "https://yeyak.seoul.go.kr/web/reservation/selectReservView.do?rsv_svc_id=S260821140351810750",
     district: "강동구",
     tel: "02-460-2909",
+    lat: 37.539070,
+    lng: 127.153330,
     details: "토종 허브 심기 및 역사 식물 이야기 가족 체험"
   },
   {
@@ -250,6 +284,8 @@ const seoulEduData = [
     url: "https://yeyak.seoul.go.kr/web/reservation/selectReservView.do?rsv_svc_id=S260821140812225025",
     district: "강동구",
     tel: "02-472-2799",
+    lat: 37.539070,
+    lng: 127.153330,
     details: "성인 대상 명화 속에 등장하는 국화 및 나무 인문학 강좌"
   },
   {
@@ -263,6 +299,8 @@ const seoulEduData = [
     url: "https://yeyak.seoul.go.kr/web/reservation/selectReservView.do?rsv_svc_id=S260211094553640419",
     district: "송파구",
     tel: "02-2152-5852",
+    lat: 37.515427,
+    lng: 127.120800,
     details: "삼국의 한강 쟁탈전 탐구, 몽촌토성 탐방, 아차산 보루 입체카드 만들기"
   },
   {
@@ -276,6 +314,8 @@ const seoulEduData = [
     url: "https://yeyak.seoul.go.kr/web/reservation/selectReservView.do?rsv_svc_id=S260211102205346964",
     district: "송파구",
     tel: "02-2152-5852",
+    lat: 37.515427,
+    lng: 127.120800,
     details: "실시간 원격 비대면 한강 삼국 역사 교육 및 피규어 만들기"
   },
   {
@@ -289,6 +329,8 @@ const seoulEduData = [
     url: "https://yeyak.seoul.go.kr/web/reservation/selectReservView.do?rsv_svc_id=S260318091048885429",
     district: "송파구",
     tel: "02-2152-5852",
+    lat: 37.515427,
+    lng: 127.120800,
     details: "몽촌토성, 풍납동토성, 석촌동고분군 유적 탐방 및 향수/가죽공예 만들기"
   },
   {
@@ -302,6 +344,8 @@ const seoulEduData = [
     url: "https://yeyak.seoul.go.kr/web/reservation/selectReservView.do?rsv_svc_id=S260801130033084929",
     district: "송파구",
     tel: "02-2152-5838",
+    lat: 37.515427,
+    lng: 127.120800,
     details: "서울 속 백제 유물을 통해 백제의 탄생과 성장을 알아보는 탐구 역사 교실"
   },
   {
@@ -315,6 +359,8 @@ const seoulEduData = [
     url: "https://yeyak.seoul.go.kr/web/reservation/selectReservView.do?rsv_svc_id=S260806101937603574",
     district: "송파구",
     tel: "02-2152-5838",
+    lat: 37.515427,
+    lng: 127.120800,
     details: "전국 초등 4~6학년 대상 실시간 온라인 백제 유물 비대면 수업"
   },
   {
@@ -328,6 +374,8 @@ const seoulEduData = [
     url: "https://yeyak.seoul.go.kr/web/reservation/selectReservView.do?rsv_svc_id=S260806134535936093",
     district: "송파구",
     tel: "02-2152-5839",
+    lat: 37.515427,
+    lng: 127.120800,
     details: "특수학급 및 장애인 단체 맞춤형 박물관 백제 역사 체험"
   },
   {
@@ -341,6 +389,8 @@ const seoulEduData = [
     url: "https://yeyak.seoul.go.kr/web/reservation/selectReservView.do?rsv_svc_id=S260827103049658240",
     district: "송파구",
     tel: "02-2152-5834",
+    lat: 37.515427,
+    lng: 127.120800,
     details: "매주 토요일 몽촌토성 발굴 성과 중심 백제 왕성 가족 체험"
   },
   {
@@ -354,6 +404,8 @@ const seoulEduData = [
     url: "https://yeyak.seoul.go.kr/web/reservation/selectReservView.do?rsv_svc_id=S260223124613897595",
     district: "강서구",
     tel: "02-2600-7848",
+    lat: 37.561087,
+    lng: 126.860559,
     details: "교육 및 주민모임을 위한 자치회관 강의실 대관"
   },
   {
@@ -367,6 +419,8 @@ const seoulEduData = [
     url: "https://yeyak.seoul.go.kr/web/reservation/selectReservView.do?rsv_svc_id=S240607144250707220",
     district: "송파구",
     tel: "02-2147-2110",
+    lat: 37.514475,
+    lng: 127.105858,
     details: "풍납근린공원, 경당역사공원, 풍납동토성 전문 문화관광 해설 (2시간)"
   },
   {
@@ -380,6 +434,8 @@ const seoulEduData = [
     url: "https://yeyak.seoul.go.kr/web/reservation/selectReservView.do?rsv_svc_id=S240607145943269835",
     district: "송파구",
     tel: "02-2147-2110",
+    lat: 37.514475,
+    lng: 127.105858,
     details: "평화의 문, 곰말다리, 망월봉, 몽촌토성 발굴 현장 역사 해설"
   },
   {
@@ -393,6 +449,8 @@ const seoulEduData = [
     url: "https://yeyak.seoul.go.kr/web/reservation/selectReservView.do?rsv_svc_id=S240607152152531185",
     district: "송파구",
     tel: "02-2147-2110",
+    lat: 37.514475,
+    lng: 127.105858,
     details: "삼전도비, 석촌호수, 석촌동 고분군 백제 역사 해설 투어"
   },
   {
@@ -406,6 +464,8 @@ const seoulEduData = [
     url: "https://yeyak.seoul.go.kr/web/reservation/selectReservView.do?rsv_svc_id=S240613105142565240",
     district: "송파구",
     tel: "02-2147-2110",
+    lat: 37.514475,
+    lng: 127.105858,
     details: "금·토요일 18시 야간 송파 역사 문화 유적 야간 해설"
   }
 ];
@@ -415,6 +475,9 @@ const state = {
   messages: [],
   isGenerating: false,
   abortController: null,
+  map: null,
+  markers: [],
+  isMapVisible: false
 };
 
 // DOM Elements
@@ -433,12 +496,18 @@ const elements = {
   systemPromptInput: document.getElementById('systemPromptInput'),
   statusDot: document.getElementById('statusDot'),
   statusText: document.getElementById('statusText'),
-
+  
   totalCourseCount: document.getElementById('totalCourseCount'),
   activeCourseCount: document.getElementById('activeCourseCount'),
 
   currentModelDisplay: document.getElementById('currentModelDisplay'),
   clearHistoryBtn: document.getElementById('clearHistoryBtn'),
+
+  // Map Elements
+  toggleMapBtn: document.getElementById('toggleMapBtn'),
+  mapToggleText: document.getElementById('mapToggleText'),
+  mapViewPanel: document.getElementById('mapViewPanel'),
+  closeMapBtn: document.getElementById('closeMapBtn'),
 
   messagesContainer: document.getElementById('messagesContainer'),
   welcomeScreen: document.getElementById('welcomeScreen'),
@@ -457,7 +526,6 @@ function setupMarkdownRenderer() {
   if (typeof marked !== 'undefined') {
     const renderer = new marked.Renderer();
 
-    // Render clickable links with blank target & custom button class if reservation link
     renderer.link = function (href, title, text) {
       const isRsvUrl = href.includes('yeyak.seoul.go.kr');
       if (isRsvUrl) {
@@ -522,15 +590,123 @@ window.copyToClipboard = function (button) {
   });
 };
 
+// Global function to trigger AI query from Map popup
+window.askAboutCourseFromMap = function (courseTitle) {
+  if (elements.userInput) {
+    elements.userInput.value = `${courseTitle} 상세 정보 및 예약 안내해줘.`;
+    autoResizeTextarea();
+    elements.chatForm.dispatchEvent(new Event('submit'));
+  }
+};
+
+// Leaflet Map Initialization & Markers
+function initMap() {
+  if (typeof L === 'undefined') return;
+
+  // Center on Seoul (Lat 37.55, Lng 126.98)
+  state.map = L.map('seoulEduMap', {
+    zoomControl: true,
+    scrollWheelZoom: true
+  }).setView([37.555, 126.985], 11);
+
+  // Add OpenStreetMap Tile Layer
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    maxZoom: 19,
+    attribution: '&copy; OpenStreetMap contributors | 서울시 공공데이터'
+  }).addTo(state.map);
+
+  // Add Markers for all courses
+  addCourseMarkers();
+}
+
+function addCourseMarkers() {
+  if (!state.map) return;
+
+  seoulEduData.forEach(item => {
+    if (item.lat && item.lng) {
+      const isRcpt = item.status === '접수중';
+      const statusBadge = isRcpt 
+        ? `<span class="map-badge rcpt">🟢 접수중</span>`
+        : `<span class="map-badge closed">🔴 ${item.status}</span>`;
+
+      const popupContent = `
+        <div class="map-popup-card">
+          <div class="map-popup-title">${item.title}</div>
+          <div class="map-popup-meta">
+            <span>📍 ${item.place} (${item.district})</span>
+            ${statusBadge}
+            <span>💰 ${item.cost}</span>
+          </div>
+          <div style="font-size: 11px; color: var(--text-secondary); margin-top: 2px;">
+            👥 ${item.target}
+          </div>
+          <div style="display: flex; gap: 6px; margin-top: 8px;">
+            <a href="${item.url}" target="_blank" rel="noopener noreferrer" class="map-popup-btn">
+              <i class="fa-solid fa-arrow-up-right-from-square"></i> 예약 바로가기
+            </a>
+            <button type="button" class="map-popup-btn" style="background: rgba(255,255,255,0.15);" onclick="askAboutCourseFromMap('${escapeHtml(item.title)}')">
+              <i class="fa-solid fa-comments"></i> AI 질문
+            </button>
+          </div>
+        </div>
+      `;
+
+      const marker = L.marker([item.lat, item.lng])
+        .addTo(state.map)
+        .bindPopup(popupContent);
+
+      state.markers.push({ id: item.id, title: item.title, lat: item.lat, lng: item.lng, marker });
+    }
+  });
+}
+
+function toggleMap(show = null) {
+  if (show === null) {
+    state.isMapVisible = !state.isMapVisible;
+  } else {
+    state.isMapVisible = show;
+  }
+
+  if (state.isMapVisible) {
+    elements.mapViewPanel.classList.remove('hidden');
+    elements.mapToggleText.textContent = '지도 접기';
+    if (state.map) {
+      setTimeout(() => {
+        state.map.invalidateSize();
+      }, 200);
+    }
+  } else {
+    elements.mapViewPanel.classList.add('hidden');
+    elements.mapToggleText.textContent = '교육 지도 보기';
+  }
+}
+
+function flyToCourseLocation(course) {
+  if (state.map && course && course.lat && course.lng) {
+    toggleMap(true);
+    state.map.flyTo([course.lat, course.lng], 14, {
+      animate: true,
+      duration: 1.2
+    });
+
+    const matchedMarker = state.markers.find(m => m.id === course.id);
+    if (matchedMarker) {
+      setTimeout(() => {
+        matchedMarker.marker.openPopup();
+      }, 1200);
+    }
+  }
+}
+
 // Initialization
 document.addEventListener('DOMContentLoaded', () => {
   setupMarkdownRenderer();
   initDatasetStats();
   initKeyAndSettings();
+  initMap();
   attachEventListeners();
 });
 
-// Update Dataset Counts
 function initDatasetStats() {
   if (elements.totalCourseCount) {
     elements.totalCourseCount.textContent = seoulEduData.length;
@@ -581,6 +757,14 @@ function attachEventListeners() {
   });
 
   elements.modelSelect.addEventListener('change', updateModelDisplay);
+
+  // Map Toggle buttons
+  if (elements.toggleMapBtn) {
+    elements.toggleMapBtn.addEventListener('click', () => toggleMap());
+  }
+  if (elements.closeMapBtn) {
+    elements.closeMapBtn.addEventListener('click', () => toggleMap(false));
+  }
 
   elements.openSidebarBtn.addEventListener('click', () => {
     elements.sidebar.classList.add('active');
@@ -648,7 +832,7 @@ function setGeneratingState(isGenerating) {
   if (isGenerating) {
     elements.sendBtn.classList.add('hidden');
     elements.stopBtn.classList.remove('hidden');
-    setStatus('서울시 공공예약 정보 검색 및 답변 중...', true);
+    setStatus('서울시 공공예약 정보 검색 및 지도 연동 중...', true);
   } else {
     elements.sendBtn.classList.remove('hidden');
     elements.stopBtn.classList.add('hidden');
@@ -664,34 +848,24 @@ function stopGeneration() {
   setGeneratingState(false);
 }
 
-// RAG: Query Matcher for Seoul Education Reservation Dataset
+// RAG Query Matcher
 function searchRelevantCourses(userQuery) {
   const query = userQuery.toLowerCase();
 
-  // Scoring each course based on match
   const scored = seoulEduData.map(course => {
     let score = 0;
 
-    // District match (종로구, 송파구, 마포구, 강서구, 강동구, 광진구 등)
     if (query.includes(course.district.toLowerCase())) score += 5;
-
-    // Place match (한성백제박물관, 서울역사박물관, 강서습지, 월드컵공원, 길동생태공원 등)
     if (query.includes(course.place.toLowerCase()) || course.place.toLowerCase().split('>').some(p => query.includes(p))) score += 5;
-
-    // Status match (접수중, 마감 등)
     if (query.includes('접수중') && course.status === '접수중') score += 4;
-
-    // Cost match (무료, 유료)
     if (query.includes('무료') && course.cost === '무료') score += 3;
     if (query.includes('유료') && course.cost === '유료') score += 3;
 
-    // Target match (어린이, 초등, 성인, 가족, 중학생, 유아, 장애인)
     if ((query.includes('어린이') || query.includes('초등')) && (course.target.includes('어린이') || course.target.includes('초등'))) score += 3;
     if (query.includes('가족') && course.target.includes('가족')) score += 3;
     if (query.includes('성인') && course.target.includes('성인')) score += 3;
     if ((query.includes('중학생') || query.includes('청소년')) && (course.target.includes('중학생') || course.target.includes('청소년'))) score += 3;
 
-    // Category & Keyword match (역사, 자연, 과학, 생태, 박물관, 반딧불이, 누에, 밧줄, 탐방, 야간, 해설 등)
     const keywords = ['역사', '자연', '과학', '생태', '박물관', '반딧불이', '누에', '밧줄', '탐방', '야간', '해설', '공방', '곤충', '삼국지', '백제', '경희궁', '인턴'];
     keywords.forEach(kw => {
       if (query.includes(kw) && (course.title.includes(kw) || course.details.includes(kw) || course.category.includes(kw))) {
@@ -702,20 +876,17 @@ function searchRelevantCourses(userQuery) {
     return { course, score };
   });
 
-  // Sort descending by score
   scored.sort((a, b) => b.score - a.score);
 
-  // If top matches have score > 0, return top 7 matches, else return all active courses or top 6
   const topMatches = scored.filter(item => item.score > 0).map(item => item.course);
   if (topMatches.length > 0) {
     return topMatches.slice(0, 7);
   }
 
-  // Default fallback: return current active courses & popular museum courses
   return seoulEduData.slice(0, 7);
 }
 
-// Chat Submission & API Call
+// Chat Submission & OpenRouter API Call
 async function handleFormSubmit(e) {
   e.preventDefault();
 
@@ -767,10 +938,13 @@ async function handleFormSubmit(e) {
   const userSystemPrompt = elements.systemPromptInput.value.trim();
   const isWebSearchEnabled = elements.webSearchToggle ? elements.webSearchToggle.checked : false;
 
-  // Retrieve relevant Seoul Public Service Education Courses
   const matchedCourses = searchRelevantCourses(userText);
 
-  // Format Context Data for LLM System Prompt
+  // Automatically fly map to top matched course location
+  if (matchedCourses && matchedCourses.length > 0) {
+    flyToCourseLocation(matchedCourses[0]);
+  }
+  
   const contextDataText = matchedCourses.map((item, idx) => `
 [강좌 ${idx + 1}]
 - 강좌명(SVCNM): ${item.title}
@@ -894,7 +1068,7 @@ ${userSystemPrompt ? "\n[추가 유저 지침]\n" + userSystemPrompt : ""}
       console.error('OpenRouter API Error:', error);
       let userFriendlyMsg = error.message;
       if (error.message.includes('User not found') || error.message.includes('401')) {
-        userFriendlyMsg = `API Key가 유효하지 않거나 만료되었습니다. (User not found)<br><br>💡 <a href="https://openrouter.ai/keys" target="_blank">https://openrouter.ai/keys</a> 에서 새로운 API Key를 발급받아 왼쪽 사이드바 [API Key] 란 또는 app.js 파일 9번째 줄에 입력해 주세요.`;
+        userFriendlyMsg = `API Key가 유효하지 않거나 만료되었습니다. (User not found)<br><br>💡 <a href="https://openrouter.ai/keys" target="_blank">https://openrouter.ai/keys</a> 에서 새로운 API Key를 발급받아 왼쪽 사이드바 [API Key] 란 또는 app.js 파일 10번째 줄에 입력해 주세요.`;
       }
       contentElement.innerHTML = `<div style="color: var(--error-color);"><i class="fa-solid fa-triangle-exclamation"></i> <strong>오류 발생:</strong> ${userFriendlyMsg}</div>`;
     }
