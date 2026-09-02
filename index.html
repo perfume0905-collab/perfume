@@ -126,7 +126,7 @@
       </div>
     </aside>
 
-    <!-- Main Chat Area -->
+    <!-- Main Content Area -->
     <main class="main-content">
       <!-- Header -->
       <header class="chat-header">
@@ -140,8 +140,8 @@
           </div>
         </div>
         <div class="header-right">
-          <button class="btn btn-secondary btn-sm" id="toggleMapBtn" title="지도 펼치기/접기">
-            <i class="fa-solid fa-map-location-dot"></i> <span id="mapToggleText">교육 지도 보기</span>
+          <button class="btn btn-secondary btn-sm" id="toggleMapBtn" title="우측 지도 펼치기/접기">
+            <i class="fa-solid fa-map-location-dot"></i> <span id="mapToggleText">우측 지도 보기</span>
           </button>
           <button class="btn btn-secondary btn-sm" id="clearHistoryBtn" title="대화 내역 비우기">
             <i class="fa-solid fa-trash-can"></i> 대화 비우기
@@ -149,77 +149,82 @@
         </div>
       </header>
 
-      <!-- Map View Panel Container (Collapsible) -->
-      <div class="map-view-panel hidden" id="mapViewPanel">
-        <div class="map-header">
-          <div class="map-title"><i class="fa-solid fa-map-pin"></i> 서울시 교육 서비스 위치 지도</div>
-          <div class="map-controls">
-            <span class="map-hint">마커를 클릭하면 상세 정보와 예약 바로가기 링크를 확인할 수 있습니다.</span>
-            <button class="btn-icon" id="closeMapBtn" title="지도 접기">
-              <i class="fa-solid fa-xmark"></i>
-            </button>
+      <!-- Main Body Split Container (Chat Left + Map Right) -->
+      <div class="main-body-split">
+        <!-- Chat Section (Left / Center) -->
+        <div class="chat-section">
+          <!-- Messages Viewport -->
+          <div class="messages-container" id="messagesContainer">
+            <!-- Welcome Screen -->
+            <div class="welcome-screen" id="welcomeScreen">
+              <div class="welcome-icon">
+                <i class="fa-solid fa-landmark"></i>
+              </div>
+              <h1>서울시 교육 공공서비스예약 AI 가이드</h1>
+              <p>박물관 탐험, 생태 체험, 인턴제, 야간 탐방 등 서울시의 다양한 공공 교육 정보를 질문하거나 우측 지도에서 위치를 직접 확인해 보세요!</p>
+
+              <!-- Quick Suggestion Chips -->
+              <div class="suggestion-chips">
+                <button class="chip" data-prompt="송파구 한성백제박물관에서 초등학생이나 가족이 참여할 수 있는 역사 교육 강좌 추천해줘.">
+                  <i class="fa-solid fa-building-columns"></i>
+                  <span>송파구 한성백제박물관 역사 강좌</span>
+                </button>
+                <button class="chip" data-prompt="마포구 월드컵공원에서 예약 가능한 반딧불이 해설 및 누에 생태 체험 예약 링크 알려줘.">
+                  <i class="fa-solid fa-bug"></i>
+                  <span>마포구 월드컵공원 생태체험 예약</span>
+                </button>
+                <button class="chip" data-prompt="현재 '접수중'인 가족 대상 무료 교육 프로그램 모아서 바로가기 URL이랑 알려줘.">
+                  <i class="fa-solid fa-users"></i>
+                  <span>현재 접수중인 가족 무료 교육</span>
+                </button>
+                <button class="chip" data-prompt="성인을 대상으로 하는 서울역사박물관이나 문화관광 탐방 해설 프로그램이 뭐가 있니?">
+                  <i class="fa-solid fa-person-walking"></i>
+                  <span>성인 대상 탐방 및 해설 프로그램</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Dynamic Messages Thread -->
+            <div class="chat-thread" id="chatThread"></div>
+          </div>
+
+          <!-- Input Bar Container -->
+          <div class="input-container">
+            <form class="input-form" id="chatForm">
+              <div class="textarea-wrapper">
+                <textarea 
+                  id="userInput" 
+                  placeholder="예: '어린이 대상 주말 무료 체험 강좌 추천해줘' 또는 '종로구 강좌 찾아줘'" 
+                  rows="1"
+                  required
+                ></textarea>
+              </div>
+              <div class="input-actions">
+                <button type="submit" class="btn-send" id="sendBtn" title="보내기">
+                  <i class="fa-solid fa-paper-plane"></i>
+                </button>
+                <button type="button" class="btn-stop hidden" id="stopBtn" title="생성 중단">
+                  <i class="fa-solid fa-square"></i>
+                </button>
+              </div>
+            </form>
+            <div class="input-footer-note">
+              <i class="fa-solid fa-shield-halved"></i> 서울특별시 공공서비스예약 데이터(https://yeyak.seoul.go.kr)에 기반하여 맞춤 검색 및 우측 지도를 제공합니다.
+            </div>
           </div>
         </div>
-        <div id="seoulEduMap" class="edu-map"></div>
-      </div>
 
-      <!-- Messages Viewport -->
-      <div class="messages-container" id="messagesContainer">
-        <!-- Welcome Screen -->
-        <div class="welcome-screen" id="welcomeScreen">
-          <div class="welcome-icon">
-            <i class="fa-solid fa-landmark"></i>
+        <!-- Right Side Map View Panel Container -->
+        <div class="map-view-panel hidden" id="mapViewPanel">
+          <div class="map-header">
+            <div class="map-title"><i class="fa-solid fa-map-pin"></i> 서울시 교육 장소 지도</div>
+            <div class="map-controls">
+              <button class="btn-icon" id="closeMapBtn" title="지도 접기">
+                <i class="fa-solid fa-xmark"></i>
+              </button>
+            </div>
           </div>
-          <h1>서울시 교육 공공서비스예약 AI 가이드</h1>
-          <p>박물관 탐험, 생태 체험, 인턴제, 야간 탐방 등 서울시의 다양한 공공 교육 정보를 질문하거나 상단 지도에서 위치를 직접 확인해 보세요!</p>
-
-          <!-- Quick Suggestion Chips -->
-          <div class="suggestion-chips">
-            <button class="chip" data-prompt="송파구 한성백제박물관에서 초등학생이나 가족이 참여할 수 있는 역사 교육 강좌 추천해줘.">
-              <i class="fa-solid fa-building-columns"></i>
-              <span>송파구 한성백제박물관 역사 강좌</span>
-            </button>
-            <button class="chip" data-prompt="마포구 월드컵공원에서 예약 가능한 반딧불이 해설 및 누에 생태 체험 예약 링크 알려줘.">
-              <i class="fa-solid fa-bug"></i>
-              <span>마포구 월드컵공원 생태체험 예약</span>
-            </button>
-            <button class="chip" data-prompt="현재 '접수중'인 가족 대상 무료 교육 프로그램 모아서 바로가기 URL이랑 알려줘.">
-              <i class="fa-solid fa-users"></i>
-              <span>현재 접수중인 가족 무료 교육</span>
-            </button>
-            <button class="chip" data-prompt="성인을 대상으로 하는 서울역사박물관이나 문화관광 탐방 해설 프로그램이 뭐가 있니?">
-              <i class="fa-solid fa-person-walking"></i>
-              <span>성인 대상 탐방 및 해설 프로그램</span>
-            </button>
-          </div>
-        </div>
-
-        <!-- Dynamic Messages Thread -->
-        <div class="chat-thread" id="chatThread"></div>
-      </div>
-
-      <!-- Input Bar Container -->
-      <div class="input-container">
-        <form class="input-form" id="chatForm">
-          <div class="textarea-wrapper">
-            <textarea 
-              id="userInput" 
-              placeholder="예: '어린이 대상 주말 무료 체험 강좌 추천해줘' 또는 '종로구 강좌 찾아줘'" 
-              rows="1"
-              required
-            ></textarea>
-          </div>
-          <div class="input-actions">
-            <button type="submit" class="btn-send" id="sendBtn" title="보내기">
-              <i class="fa-solid fa-paper-plane"></i>
-            </button>
-            <button type="button" class="btn-stop hidden" id="stopBtn" title="생성 중단">
-              <i class="fa-solid fa-square"></i>
-            </button>
-          </div>
-        </form>
-        <div class="input-footer-note">
-          <i class="fa-solid fa-shield-halved"></i> 서울특별시 공공서비스예약 데이터(https://yeyak.seoul.go.kr)에 기반하여 맞춤 검색 및 위치 지도를 제공합니다.
+          <div id="seoulEduMap" class="edu-map"></div>
         </div>
       </div>
     </main>

@@ -669,7 +669,7 @@ function toggleMap(show = null) {
 
   if (state.isMapVisible) {
     elements.mapViewPanel.classList.remove('hidden');
-    elements.mapToggleText.textContent = '지도 접기';
+    if (elements.mapToggleText) elements.mapToggleText.textContent = '우측 지도 접기';
     if (state.map) {
       setTimeout(() => {
         state.map.invalidateSize();
@@ -677,7 +677,7 @@ function toggleMap(show = null) {
     }
   } else {
     elements.mapViewPanel.classList.add('hidden');
-    elements.mapToggleText.textContent = '교육 지도 보기';
+    if (elements.mapToggleText) elements.mapToggleText.textContent = '우측 지도 보기';
   }
 }
 
