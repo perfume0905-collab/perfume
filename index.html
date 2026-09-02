@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>OmniAI - OpenRouter AI Chatbot</title>
-  <meta name="description" content="백엔드 없이 브라우저에서 직접 OpenRouter API를 호출하는 실시간 AI 챗봇">
+  <title>서울시 교육 공공서비스예약 AI 가이드 - OmniAI</title>
+  <meta name="description" content="서울시 공공서비스예약 교육·강좌 데이터를 기반으로 원하는 예약을 맞춤 안내하는 AI 챗봇">
   
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -31,10 +31,12 @@
       <div class="sidebar-header">
         <div class="brand">
           <div class="brand-icon">
-            <i class="fa-solid fa-brain-circuit"></i>
+            <i class="fa-solid fa-graduation-cap"></i>
           </div>
-          <span class="brand-title">OmniAI</span>
-          <span class="badge">OpenRouter</span>
+          <div class="brand-text">
+            <span class="brand-title">서울시 교육예약 AI</span>
+            <span class="badge">공공데이터</span>
+          </div>
         </div>
         <button class="btn-icon mobile-only" id="closeSidebarBtn" title="사이드바 닫기">
           <i class="fa-solid fa-xmark"></i>
@@ -44,36 +46,49 @@
       <div class="sidebar-content">
         <!-- New Chat Button -->
         <button class="btn btn-primary new-chat-btn" id="newChatBtn">
-          <i class="fa-solid fa-plus"></i> 새 대화 시작
+          <i class="fa-solid fa-plus"></i> 새 질문 시작하기
         </button>
+
+        <!-- Dataset Summary Status Card -->
+        <div class="dataset-info-card">
+          <div class="card-title"><i class="fa-solid fa-database"></i> 교육 예약 공공데이터</div>
+          <div class="stat-grid">
+            <div class="stat-item">
+              <span class="stat-num" id="totalCourseCount">30</span>
+              <span class="stat-label">수집된 강좌</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-num active-count" id="activeCourseCount">14</span>
+              <span class="stat-label">현재 접수중</span>
+            </div>
+          </div>
+          <div class="data-source-tag"><i class="fa-solid fa-circle-check"></i> 서울 열린데이터 광장 연동</div>
+        </div>
 
         <!-- API Key & Config Section -->
         <div class="config-section">
-          <div class="section-title"><i class="fa-solid fa-key"></i> OpenRouter 설정</div>
+          <div class="section-title"><i class="fa-solid fa-sliders"></i> AI 가이드 설정</div>
           
           <div class="form-group">
-            <label for="apiKeyInput">API Key</label>
+            <label for="apiKeyInput">OpenRouter API Key</label>
             <div class="input-with-icon">
               <input type="password" id="apiKeyInput" placeholder="sk-or-v1-..." autocomplete="off">
               <button type="button" class="toggle-password" id="togglePasswordBtn" title="API Key 보기/숨기기">
                 <i class="fa-solid fa-eye"></i>
               </button>
             </div>
-            <span class="help-text">코드에 입력된 키가 자동 입력됩니다. 필요시 수정 가능합니다.</span>
+            <span class="help-text">코드에 설정된 키가 자동 로드됩니다.</span>
           </div>
 
           <div class="form-group">
             <label for="modelSelect">AI 모델 선택</label>
             <div class="select-wrapper">
               <select id="modelSelect">
-                <option value="google/gemini-2.0-flash-001">Google: Gemini 2.0 Flash (빠름/추천)</option>
-                <option value="perplexity/sonar">Perplexity: Sonar (웹 검색 전문)</option>
-                <option value="perplexity/sonar-reasoning">Perplexity: Sonar Reasoning (검색 + 추론)</option>
-                <option value="meta-llama/llama-3.3-70b-instruct">Meta: Llama 3.3 70B Instruct</option>
+                <option value="google/gemini-2.0-flash-001">Google: Gemini 2.0 Flash (추천)</option>
+                <option value="perplexity/sonar">Perplexity: Sonar (실시간 정보 검색)</option>
+                <option value="meta-llama/llama-3.3-70b-instruct">Meta: Llama 3.3 70B</option>
                 <option value="deepseek/deepseek-r1">DeepSeek: R1 (추론 특화)</option>
                 <option value="openai/gpt-4o-mini">OpenAI: GPT-4o Mini</option>
-                <option value="qwen/qwen-2.5-72b-instruct">Qwen: Qwen 2.5 72B Instruct</option>
-                <option value="anthropic/claude-3.5-haiku">Anthropic: Claude 3.5 Haiku</option>
               </select>
             </div>
           </div>
@@ -83,19 +98,19 @@
             <label class="toggle-switch">
               <input type="checkbox" id="webSearchToggle" checked>
               <span class="slider"></span>
-              <span class="toggle-label"><i class="fa-solid fa-globe"></i> 최신 웹 검색 연동 (Web Search)</span>
+              <span class="toggle-label"><i class="fa-solid fa-globe"></i> 최신 추가 정보 웹검색</span>
             </label>
-            <span class="help-text">OpenRouter 웹 검색 플러그인을 활용하여 최신 정보 조회 및 거짓말(환각)을 방지합니다.</span>
+            <span class="help-text">공공예약 데이터 외 최신 뉴스나 위치 검색을 병행합니다.</span>
           </div>
 
           <div class="form-group">
-            <label for="temperatureInput">창의성 (Temperature): <span id="tempValue">0.7</span></label>
-            <input type="range" id="temperatureInput" min="0" max="2" step="0.1" value="0.7">
+            <label for="temperatureInput">답변 다양성: <span id="tempValue">0.5</span></label>
+            <input type="range" id="temperatureInput" min="0" max="1" step="0.1" value="0.5">
           </div>
 
           <div class="form-group">
-            <label for="systemPromptInput">시스템 프롬프트 (페르소나)</label>
-            <textarea id="systemPromptInput" rows="3" placeholder="예: 당신은 친절하고 전문적인 AI 프로그래밍 튜터입니다."></textarea>
+            <label for="systemPromptInput">AI 페르소나 지침</label>
+            <textarea id="systemPromptInput" rows="2" placeholder="서울시 공공서비스예약 교육 강좌 안내 전문가"></textarea>
           </div>
         </div>
 
@@ -117,8 +132,8 @@
             <i class="fa-solid fa-bars"></i>
           </button>
           <div class="current-model-info">
-            <span class="model-label">현재 모델</span>
-            <h2 id="currentModelDisplay" class="model-name">Google Gemini 2.0 Flash</h2>
+            <span class="model-label">공공데이터 챗봇 가이드</span>
+            <h2 id="currentModelDisplay" class="model-name">서울시 교육 공공서비스예약 AI</h2>
           </div>
         </div>
         <div class="header-right">
@@ -130,36 +145,36 @@
 
       <!-- Messages Viewport -->
       <div class="messages-container" id="messagesContainer">
-        <!-- Welcome Screen (Initial view when no messages) -->
+        <!-- Welcome Screen -->
         <div class="welcome-screen" id="welcomeScreen">
           <div class="welcome-icon">
-            <i class="fa-solid fa-sparkles"></i>
+            <i class="fa-solid fa-landmark"></i>
           </div>
-          <h1>무엇을 도와드릴까요?</h1>
-          <p>OpenRouter API를 통해 최신 AI 모델들과 즉시 대화해보세요.</p>
+          <h1>서울시 교육 공공서비스예약 AI 가이드</h1>
+          <p>박물관 탐험, 생태 체험, 인턴제, 야간 탐방 등 서울시의 다양한 공공 교육 정보를 질문해 보세요!</p>
 
           <!-- Quick Suggestion Chips -->
           <div class="suggestion-chips">
-            <button class="chip" data-prompt="양자 컴퓨터의 원리를 초등학생도 이해할 수 있게 쉬운 비유로 설명해줘.">
-              <i class="fa-solid fa-atom"></i>
-              <span>양자 컴퓨터 원리 쉬운 설명</span>
+            <button class="chip" data-prompt="송파구 한성백제박물관에서 초등학생이나 가족이 참여할 수 있는 역사 교육 강좌 추천해줘.">
+              <i class="fa-solid fa-building-columns"></i>
+              <span>송파구 한성백제박물관 역사 강좌</span>
             </button>
-            <button class="chip" data-prompt="JavaScript 스트리밍 API(Fetch & ReadableStream)를 사용하는 간단한 코드 예제를 작성해줘.">
-              <i class="fa-solid fa-code"></i>
-              <span>JS 스트리밍 코드 예제</span>
+            <button class="chip" data-prompt="마포구 월드컵공원에서 예약 가능한 반딧불이 해설 및 누에 생태 체험 예약 링크 알려줘.">
+              <i class="fa-solid fa-bug"></i>
+              <span>마포구 월드컵공원 생태체험 예약</span>
             </button>
-            <button class="chip" data-prompt="프로젝트 팀원들에게 성공적인 릴리즈를 축하하는 센스있는 이메일 초안 작성해줘.">
-              <i class="fa-solid fa-envelope"></i>
-              <span>축하 이메일 초안 작성</span>
+            <button class="chip" data-prompt="현재 '접수중'인 가족 대상 무료 교육 프로그램 모아서 바로가기 URL이랑 알려줘.">
+              <i class="fa-solid fa-users"></i>
+              <span>현재 접수중인 가족 무료 교육</span>
             </button>
-            <button class="chip" data-prompt="파이썬(Python)의 리스트 컴프리헨션(List Comprehension) 문법과 팁을 알려줘.">
-              <i class="fa-brands fa-python"></i>
-              <span>Python 팁 & 꿀팁</span>
+            <button class="chip" data-prompt="성인을 대상으로 하는 서울역사박물관이나 문화관광 탐방 해설 프로그램이 뭐가 있니?">
+              <i class="fa-solid fa-person-walking"></i>
+              <span>성인 대상 탐방 및 해설 프로그램</span>
             </button>
           </div>
         </div>
 
-        <!-- Dynamic Messages Will Be Appended Here -->
+        <!-- Dynamic Messages Thread -->
         <div class="chat-thread" id="chatThread"></div>
       </div>
 
@@ -169,7 +184,7 @@
           <div class="textarea-wrapper">
             <textarea 
               id="userInput" 
-              placeholder="메시지를 입력하세요... (Shift + Enter로 줄바꿈)" 
+              placeholder="예: '어린이 대상 주말 무료 체험 강좌 추천해줘' 또는 '종로구 강좌 찾아줘'" 
               rows="1"
               required
             ></textarea>
@@ -184,7 +199,7 @@
           </div>
         </form>
         <div class="input-footer-note">
-          <i class="fa-solid fa-shield-halved"></i> API Key는 브라우저 내부 메모리에만 유지되며 외부로 유출되지 않습니다.
+          <i class="fa-solid fa-shield-halved"></i> 서울특별시 공공서비스예약 데이터(https://yeyak.seoul.go.kr)에 기반하여 맞춤 검색 및 안내를 제공합니다.
         </div>
       </div>
     </main>

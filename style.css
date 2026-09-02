@@ -244,6 +244,105 @@ html, body {
   font-size: 15px;
 }
 
+/* Dataset Info Card */
+.dataset-info-card {
+  background: var(--bg-glass-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.dataset-info-card .card-title {
+  font-size: 12px;
+  font-weight: 600;
+  color: #818cf8;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.stat-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: var(--radius-sm);
+  padding: 8px;
+}
+
+.stat-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.stat-num {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text-primary);
+  font-family: var(--font-mono);
+}
+
+.stat-num.active-count {
+  color: var(--success-color);
+}
+
+.stat-label {
+  font-size: 10px;
+  color: var(--text-muted);
+}
+
+.data-source-tag {
+  font-size: 11px;
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.data-source-tag i {
+  color: var(--success-color);
+}
+
+/* Reservation Links & Badges inside Messages */
+.message-content a {
+  color: #818cf8;
+  text-decoration: underline;
+  word-break: break-all;
+  font-weight: 500;
+  transition: color var(--transition-fast);
+}
+
+.message-content a:hover {
+  color: #a5b4fc;
+}
+
+.rsv-link-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  background: var(--accent-gradient);
+  color: white !important;
+  border-radius: var(--radius-sm);
+  font-size: 12px;
+  font-weight: 600;
+  text-decoration: none !important;
+  margin-top: 6px;
+  box-shadow: 0 2px 8px var(--accent-glow);
+}
+
+.rsv-link-btn:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
+}
+
 /* Config Section Form Controls */
 .config-section {
   display: flex;
