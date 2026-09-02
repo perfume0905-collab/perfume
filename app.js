@@ -3,10 +3,16 @@
  * OmniAI - 서울시 교육 공공서비스예약 AI 가이드 JavaScript
  * ==========================================================================
  * 
- * [실습용 OpenRouter API Key 설정]
- * 아래 DEFAULT_OPENROUTER_KEY 변수에 오픈라우터 API 키를 입력해 두시면 자동 로드됩니다.
+/**
+ * 1. OpenRouter AI 챗봇 호출 키 (sk-or-v1-로 시작하는 키)
+ *    https://openrouter.ai/keys 에서 발급받아 입력하세요.
  */
-const DEFAULT_OPENROUTER_KEY = '78666347696b616f38395043566a6f';
+const DEFAULT_OPENROUTER_KEY = ''; // 예: 'sk-or-v1-xxxxxxxxxxxxxxxx'
+
+/**
+ * 2. 서울시 열린데이터광장 공공데이터 인증키 (OA-2268 연동용)
+ */
+const SEOUL_OPEN_API_KEY = '78666347696b616f38395043566a6f';
 
 // ==========================================================================
 // 서울시 교육 공공서비스예약 데이터셋 (OA-2268 연동 데이터)
